@@ -16,7 +16,9 @@ import {
 } from 'react-native';
 import { color, measure } from '../values';
 import _ from "lodash"
-import Heart from "../assets/heart.png"
+import { saveFavourite } from '../action/saveFavouritDetailAction';
+import Icon from 'react-native-vector-icons/Feather';
+
 
 const ListItem = ({ item, props }) => {
   return (
@@ -36,7 +38,9 @@ const ListItem = ({ item, props }) => {
             </View>
             <View style={{ width: "20%", paddingRight: 12 }}>
               {props.route.name !== "DetailScreen" &&
-                <Image source={Heart} style={{ width: 20, height: 20 }} />
+                <TouchableWithoutFeedback onPress={() => saveFavourite(item)}>
+                <Icon name="heart" color={color.colorSecoundary} size={20} />
+                </TouchableWithoutFeedback>
               }
             </View>
           </View>

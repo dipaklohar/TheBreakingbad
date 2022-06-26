@@ -8,7 +8,6 @@ const saveFavourite = (state = initialState, action) => {
       return {
         ...state,
         favouritList: state.places.concat({
-          key: Math.random(),
           value: action.payload
         })
       };

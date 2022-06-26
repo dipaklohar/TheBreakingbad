@@ -33,7 +33,6 @@ const MainScreen = (props) => {
   }, []);
 
 
-
   return (
     <>
       {loading ?

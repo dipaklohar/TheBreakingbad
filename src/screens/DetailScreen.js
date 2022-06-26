@@ -9,19 +9,15 @@ import {
   ImageBackground,
   ScrollView
 } from 'react-native';
-import { GradientBackground } from '../components';
+import { GradientBackground, ActionBar } from '../components';
 import { color, measure, connection, strings } from '../values';
 import { ListItem } from '../components';
 import _ from "lodash"
-
+import Icon from 'react-native-vector-icons/Feather';
 
 const DetailsScreen = (props) => {
   const [Userslist, setUserslist] = useState([]);
-
   const detailsObj = _.get(props, "route.params.details", null)
-
-  console.log(props);
-
   useEffect(() => {
     fetch(connection.baseUrl + "/api/characters")
       .then((response) => response.json())
@@ -42,6 +38,8 @@ const DetailsScreen = (props) => {
             resizeMode={"center"}
             source={{ uri: _.get(detailsObj, "img", null) }}>
             <GradientBackground />
+            <ActionBar
+              properties={props} />
 
             <Image
               style={styles.imageView}
@@ -61,7 +59,10 @@ const DetailsScreen = (props) => {
             </View>
             <View style={{ width: "50%", alignItems: "flex-end" }}>
               <Text style={styles.lightTextname}></Text>
-              <Text style={styles.lightTextname}>{_.get(detailsObj, "birthday", null)}</Text>
+              <View style={styles.birthView}>
+                <Text style={styles.lightTextbirth}>{_.get(detailsObj, "birthday", null)}</Text>
+                <Icon name="gift" color={color.colorAccent} size={20} />
+              </View>
             </View>
           </View>
 
@@ -136,6 +137,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginVertical: 2
   },
+  lightTextbirth: {
+    color: color.colorAccent,
+    fontFamily: "Roboto-Light",
+    fontSize: 14,
+    marginRight: 10
+  },
+  birthView: {
+    flexDirection: 'row',
+    alignItems: "center",
+    marginVertical: 2
+  },
 
   thinTextname: {
     color: color.maroon,
@@ -160,7 +172,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: color.colorPrimary,
     marginTop: 20,
-    padding:5,
+    padding: 5,
     marginLeft: 7,
     justifyContent: "center",
     alignItems: "center"
