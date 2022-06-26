@@ -1,8 +1,8 @@
 import { createStore, combineReducers } from 'redux';
-import saveFavouritDetailAction from './reducer/saveFavouritDetailAction';
+import FavouritDetailReducer from './reducer/FavouritDetailReducer';
 
 const rootReducer = combineReducers({
-    favouritList: saveFavouritDetailAction
+    favouritList: FavouritDetailReducer
 });
 
 const configureStore = () => {

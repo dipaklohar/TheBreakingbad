@@ -16,11 +16,33 @@ import {
 } from 'react-native';
 import { color, measure } from '../values';
 import _ from "lodash"
-import { saveFavourite } from '../action/saveFavouritDetailAction';
+import Like from "../assets/like.png"
+import Unlike from "../assets/unlike.png"
+
+
+import { addFavourite, removeFavourite } from '../action/saveFavouritDetailAction';
 import Icon from 'react-native-vector-icons/Feather';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const ListItem = ({ item, props }) => {
+  const dispatch = useDispatch();
+  const [favlist] = useSelector((state) => [
+    state.favouritList.favouritList,
+  ]);
+
+  const containsObject = (obj, list) => {
+    if (list) {
+      var i;
+      for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   return (
     <TouchableWithoutFeedback
       onPress={() => props.navigation.navigate("DetailScreen", { details: item })}>
@@ -38,8 +60,9 @@ const ListItem = ({ item, props }) => {
             </View>
             <View style={{ width: "20%", paddingRight: 12 }}>
               {props.route.name !== "DetailScreen" &&
-                <TouchableWithoutFeedback onPress={() => saveFavourite(item)}>
-                <Icon name="heart" color={color.colorSecoundary} size={20} />
+                <TouchableWithoutFeedback onPress={() => containsObject(item, favlist) ? dispatch(removeFavourite(item)) : dispatch(addFavourite(item))}>
+                  {/* <Icon name="heart" color={color.colorSecoundary} size={20} /> */}
+                  {containsObject(item, favlist) ? <Image source={Like} style={styles.likebtn} /> : <Image source={Unlike} style={styles.likebtn} />}
                 </TouchableWithoutFeedback>
               }
             </View>
@@ -78,7 +101,10 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Light",
     color: color.colorAccent
   },
-
+  likebtn: {
+    width: 20,
+    height: 20
+  },
 });
 
 export default ListItem;

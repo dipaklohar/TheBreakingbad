@@ -17,17 +17,38 @@ import {
 } from 'react-native';
 import { color, strings, connection } from '../values';
 import _ from 'lodash'
-
-let _debounceObj = null;
-
 import Icon from 'react-native-vector-icons/Feather';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFavourite, removeFavourite } from '../action/saveFavouritDetailAction';
+let _debounceObj = null;
+import Like from "../assets/like.png"
+import Unlike from "../assets/unlike.png"
+import Search from "../assets/search.png"
+import Close from "../assets/close.png"
+import Back from "../assets/back.png"
 
 
 const ActionBar = ({ properties, filterData }) => {
+  const dispatch = useDispatch();
   const [searchbar, setsearchbar] = useState(false);
   const [searchChar, setsearchChar] = useState("");
   const [loading, setLoading] = useState("");
+  const [favlist] = useSelector((state) => [
+    state.favouritList.favouritList,
+  ]);
+  const detailsObj = _.get(properties, "route.params.details", null)
 
+  const containsObject = (obj, list) => {
+    if (list) {
+      var i;
+      for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
   const _searchFilterFunction = (searchChar) => {
     setsearchChar(searchChar)
@@ -53,7 +74,9 @@ const ActionBar = ({ properties, filterData }) => {
               <TouchableHighlight
                 style={{ width: "10%", alignItems: "center" }}
                 onPress={() => setsearchbar(false)}>
-                <Icon name="arrow-left" color={color.colorAccent} size={20} />
+                {/* <Icon name="arrow-left" color={color.colorAccent} size={20} /> */}
+                <Image source={Back} style={styles.likebtn} />
+
               </TouchableHighlight>
               <TextInput
                 style={styles.searchbarView}
@@ -68,7 +91,9 @@ const ActionBar = ({ properties, filterData }) => {
               <TouchableHighlight
                 style={{ width: "10%", alignItems: "center" }}
                 onPress={() => setsearchbar(false)}>
-                <Icon name="x" color={color.colorAccent} size={20} />
+                {/* <Icon name="x" color={color.colorAccent} size={20} /> */}
+                <Image source={Close} style={styles.likebtn} />
+
               </TouchableHighlight>
             </View>
             :
@@ -79,12 +104,15 @@ const ActionBar = ({ properties, filterData }) => {
               <View style={styles.secoundView}>
                 <TouchableHighlight
                   onPress={() => setsearchbar(true)}>
-                  <Icon name="search" color={color.colorAccent} size={20} />
+                  {/* <Icon name="search" color={color.colorAccent} size={20} /> */}
+                  <Image source={Search} style={styles.likebtn} />
+
                 </TouchableHighlight>
 
                 <TouchableHighlight
                   onPress={() => properties.navigation.navigate("FavouritesScreen")}>
-                  <Icon name="heart" color={color.colorSecoundary} size={20} />
+                  {/* <Icon name="heart" color={color.colorSecoundary} size={20} /> */}
+                  <Image source={Like} style={styles.likebtn} />
                 </TouchableHighlight>
               </View>
             </View>
@@ -100,7 +128,9 @@ const ActionBar = ({ properties, filterData }) => {
           <View style={styles.favSecoundView}>
             <TouchableHighlight
               onPress={() => properties.navigation.navigate("MainScreen")}>
-              <Icon name="x" color={color.colorAccent} size={20} />
+              {/* <Icon name="x" color={color.colorAccent} size={20} /> */}
+              <Image source={Close} style={styles.likebtn} />
+
             </TouchableHighlight>
           </View>
         </View>
@@ -110,20 +140,21 @@ const ActionBar = ({ properties, filterData }) => {
           <TouchableHighlight
             style={styles.detailsView01}
             onPress={() => properties.navigation.navigate("MainScreen")}>
-            <Icon name="arrow-left" color={color.colorAccent} size={20} />
+            {/* <Icon name="arrow-left" color={color.colorAccent} size={20} /> */}
+            <Image source={Back} style={styles.likebtn} />
+
           </TouchableHighlight>
 
           <View style={{ width: "80%" }} />
 
           <TouchableHighlight
             style={styles.detailsView01}
-            onPress={() => { }}>
-            <Icon name="heart" color={color.colorSecoundary} size={20} />
+            onPress={() => { containsObject(detailsObj, favlist) ? dispatch(removeFavourite(detailsObj)) : dispatch(addFavourite(detailsObj)) }}>
+            {/* <Icon name="heart" color={color.colorSecoundary} size={20} /> */}
+            {containsObject(detailsObj, favlist) ? <Image source={Like} style={styles.likebtn} /> : <Image source={Unlike} style={styles.likebtn} />}
           </TouchableHighlight>
         </View>
       }
-
-
     </View>
   );
 };
@@ -196,7 +227,11 @@ const styles = StyleSheet.create({
     width: "80%",
     fontFamily: '"Roboto-Thin',
     fontSize: 30,
-    color: color.colorAccent
+    color: color.colorAccent,
+  },
+  likebtn: {
+    width: 20,
+    height: 20
   },
 
 

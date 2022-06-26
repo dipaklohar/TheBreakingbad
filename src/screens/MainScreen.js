@@ -16,19 +16,26 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { color, connection, strings } from '../values';
-import { ListItem, ActionBar,Emptystate } from '../components';
+import { ListItem, ActionBar, Emptystate } from '../components';
 
+import { useSelector } from 'react-redux';
 
 const MainScreen = (props) => {
 
   const [Userslist, setUserslist] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [favouritList] = useSelector((state) => [
+    state.favouritList,
+  ]);
+
+
+
   useEffect(() => {
     fetch(connection.baseUrl + "/api/characters")
       .then((response) => response.json())
       .then((json) => setUserslist(json))
-      .catch((error) => console.error(error))
+      .catch((error) => setLoading(false))
       .finally(() => setLoading(false));
   }, []);
 
@@ -56,8 +63,8 @@ const MainScreen = (props) => {
                 props={props}
                 item={item} />}
             numColumns={2}
-            ListEmptyComponent={()=>
-              <Emptystate/>
+            ListEmptyComponent={() =>
+              <Emptystate />
             }
           />
         </View>

@@ -14,6 +14,7 @@ import { color, measure, connection, strings } from '../values';
 import { ListItem } from '../components';
 import _ from "lodash"
 import Icon from 'react-native-vector-icons/Feather';
+import Gift from "../assets/gift.png"
 
 const DetailsScreen = (props) => {
   const [Userslist, setUserslist] = useState([]);
@@ -61,7 +62,8 @@ const DetailsScreen = (props) => {
               <Text style={styles.lightTextname}></Text>
               <View style={styles.birthView}>
                 <Text style={styles.lightTextbirth}>{_.get(detailsObj, "birthday", null)}</Text>
-                <Icon name="gift" color={color.colorAccent} size={20} />
+                {/* <Icon name="gift" color={color.colorAccent} size={20} /> */}
+                <Image source={Gift} style={styles.likebtn} />
               </View>
             </View>
           </View>
@@ -194,6 +196,11 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     marginTop: 70
   },
+  likebtn: {
+    width: 20,
+    height: 20
+  },
+
 });
 
 export default DetailsScreen;

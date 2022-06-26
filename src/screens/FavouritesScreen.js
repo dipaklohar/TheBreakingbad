@@ -10,19 +10,9 @@ import { ListItem, ActionBar, Emptystate } from '../components';
 import { useSelector } from 'react-redux';
 
 const FavouritesScreen = (props) => {
-
-  const [favouritlist, setFavouritlist] = useState([]);
-  const [favouritList] = useSelector((state) =>[
-		state.favouritList,
-	]);
-
-
-  
-  useEffect(() => {
-    console.log(favouritlist);
-  }, []);
-
-
+  const [favlist] = useSelector((state) => [
+    state.favouritList.favouritList,
+  ]);
 
   return (
     <View style={styles.mainContainer}>
@@ -32,7 +22,7 @@ const FavouritesScreen = (props) => {
         properties={props} />
       <FlatList
         style={{ paddingTop: 60 }}
-        data={favouritlist}
+        data={favlist}
         renderItem={({ item }) =>
           <ListItem
             props={props}
